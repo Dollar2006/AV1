@@ -1,7 +1,5 @@
 export async function main(): Promise<void> {
     console.log('✅ CLI inicializado com sucesso!');
-    console.log('✨ Sistema Aerocode está funcionando!');
-    console.log('🚀 TypeScript configurado corretamente!');
     
     // Simula uma pequena pausa para melhor visualização
     await new Promise(resolve => setTimeout(resolve, 1000));
