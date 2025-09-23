@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cli_1 = require("./infraestrutura/cli/Cli");
+const Cli_1 = require("./infraestrutura/cli/Cli");
 console.log('🚀 Aerocode CLI - Sistema de Gestão de Produção de Aeronaves');
 console.log('============================================================');
 // Iniciar a aplicação
