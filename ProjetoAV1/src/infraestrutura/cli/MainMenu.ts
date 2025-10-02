@@ -1,4 +1,10 @@
 import inquirer from 'inquirer'
+import { AeronaveMenu } from './AeronaveMenu';
+import { PecaMenu } from './PecaMenu';
+import { FuncionarioMenu } from './FuncionarioMenu';
+import { EtapaMenu } from './EtapaMenu';
+import { TesteMenu } from './TesteMenu';
+import { RelatorioMenu } from './RelatorioMenu';
 //Import dos outros Menus
 
 export class MainMenu {
