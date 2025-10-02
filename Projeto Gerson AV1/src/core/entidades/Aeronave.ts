@@ -1,68 +1,100 @@
-import { TipoAeronave } from "../enums/TipoAeronave"
+import { TipoAeronave } from '../enums/TipoAeronave';
+import { Peca } from './Peca';
+import { Etapa } from './Etapa';
+import { Teste } from './Teste';
+import fs from 'fs';
 
-class Aeronave {
-    private codigo: string
-    private modelo: string
-    private tipo: TipoAeronave
-    private capacidade: number
-    private alcance: number
-    constructor(codigo: string,modelo: string,tipo: TipoAeronave,capacidade: number,alcance: number) {
-        this.codigo = codigo
-        this.modelo = modelo
-        this.tipo = tipo
-        this.capacidade = capacidade
-        this.alcance = alcance
-    }
-    public get getCodigo(): string {
-        return this.codigo;
-    }
+export class Aeronave {
+    constructor(
+        public codigo: string,
+        public modelo: string,
+        public tipo: TipoAeronave,
+        public capacidade: number,
+        public alcance: number,
+        public pecas: Peca[] = [],
+        public etapas: Etapa[] = [],
+        public testes: Teste[] = []
+    ) {}
 
-    public get getModelo(): string {
-        return this.modelo;
-    }
-
-    public get getTipo(): TipoAeronave {
-        return this.tipo;
-    }
-
-    public get getCapacidade(): number {
-        return this.capacidade;
-    }
-
-    public get getAlcance(): number {
-        return this.alcance;
+    exibirDetalhes(): void {
+        console.log('=== DETALHES DA AERONAVE ===');
+        console.log(`Código: ${this.codigo}`);
+        console.log(`Modelo: ${this.modelo}`);
+        console.log(`Tipo: ${this.tipo}`);
+        console.log(`Capacidade: ${this.capacidade} passageiros`);
+        console.log(`Alcance: ${this.alcance} km`);
+        console.log(`Peças associadas: ${this.pecas.length}`);
+        console.log(`Etapas: ${this.etapas.length}`);
+        console.log(`Testes: ${this.testes.length}`);
     }
 
-  
-    public set setCodigo(novoCodigo: string) {
-        this.codigo = novoCodigo;
-    }
+    salvar(): void {
+        try {
+            if (!fs.existsSync('data')) {
+                fs.mkdirSync('data');
+            }
 
-    public set setModelo(novoModelo: string) {
-        this.modelo = novoModelo;
-    }
+            const dados = {
+                codigo: this.codigo,
+                modelo: this.modelo,
+                tipo: this.tipo,
+                capacidade: this.capacidade,
+                alcance: this.alcance,
+                pecas: this.pecas.map(peca => ({
+                    nome: peca.getNome,
+                    tipo: peca.getTipo,
+                    fornecedor: peca.getFornecedor,
+                    status: peca.getStatus
+                })),
+                etapas: this.etapas.map(etapa => ({
+                    nome: etapa.nome,
+                    prazo: etapa.prazo,
+                    status: etapa.status
+                })),
+                testes: this.testes.map(teste => ({
+                    tipo: teste.tipo,
+                    resultado: teste.resultado
+                }))
+            };
 
-    public set setTipo(novoTipo: TipoAeronave) {
-        this.tipo = novoTipo;
-    }
-
-    public set setCapacidade(novaCapacidade: number) {
-        if (novaCapacidade > 0) { // Exemplo de validação
-            this.capacidade = novaCapacidade;
-        } else {
-            console.log("A capacidade deve ser um número positivo.");
+            fs.writeFileSync(`data/aeronave_${this.codigo}.json`, JSON.stringify(dados, null, 2));
+            console.log(`✅ Aeronave ${this.codigo} salva com sucesso!`);
+        } catch (error) {
+            console.error('❌ Erro ao salvar aeronave:', error);
         }
     }
 
-    public set setAlcance(novoAlcance: number) {
-        if (novoAlcance > 0) {
-            this.alcance = novoAlcance;
-        } else {
-            console.log("O alcance deve ser um número positivo.");
+    carregar(codigo: string): void {
+        try {
+            const arquivo = `data/aeronave_${codigo}.json`;
+            
+            if (fs.existsSync(arquivo)) {
+                const dados = JSON.parse(fs.readFileSync(arquivo, 'utf8'));
+                
+                this.codigo = dados.codigo;
+                this.modelo = dados.modelo;
+                this.tipo = dados.tipo;
+                this.capacidade = dados.capacidade;
+                this.alcance = dados.alcance;
+                
+                console.log(`✅ Aeronave ${codigo} carregada com sucesso!`);
+            } else {
+                console.log('❌ Arquivo não encontrado');
+            }
+        } catch (error) {
+            console.error('❌ Erro ao carregar aeronave:', error);
         }
     }
-    public detalhes(): void{
-        console.log('-------------DADOS DA AERONAVE----------------\n')
-        console.log(``)
+
+    adicionarPeca(peca: Peca): void {
+        this.pecas.push(peca);
+    }
+
+    adicionarEtapa(etapa: Etapa): void {
+        this.etapas.push(etapa);
+    }
+
+    adicionarTeste(teste: Teste): void {
+        this.testes.push(teste);
     }
 }

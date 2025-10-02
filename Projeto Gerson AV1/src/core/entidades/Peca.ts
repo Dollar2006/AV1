@@ -3,7 +3,7 @@ import { StatusPeca } from '../enums/StatusPeca';
 import * as fs from 'fs';
 import * as path from 'path';
 
-export default class Peca {
+export class Peca {
     private nome: string;
     private tipo: TipoPeca;
     private fornecedor: string;

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { main } from './infraestrutura/cli/Cli'
+import { main } from './infraestrutura/cli/MainMenu'
 
 console.log('🚀 Aerocode CLI - Sistema de Gestão de Produção de Aeronaves');
 console.log('============================================================');
